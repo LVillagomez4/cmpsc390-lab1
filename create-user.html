@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CMPSC300 Create User</title>
+</head>
+
+<body>
+
+    <h1>CMPSC300 Server Demo</h1>
+
+    <h2>Create User</h2>
+    <form id="createUserForm">
+        <label>Username</label><br />
+        <input type="text" name="username" required /><br /><br />
+
+        <label>Password</label><br />
+        <input type="password" name="password" required /><br /><br />
+
+        <label>First Name</label><br />
+        <input type="text" name="firstName" required /><br /><br />
+
+        <label>Last Name</label><br />
+        <input type="text" name="lastName" required /><br /><br />
+
+        <label>Birthday</label><br />
+        <input type="text" name="birthday" placeholder="YYYY-MM-DD" required /><br /><br />
+
+        <button type="submit">Create User</button>
+    </form>
+
+    <p id="createResult"></p>
+
+    <script>
+        const createUserForm = document.getElementById("createUserForm");
+        const createResult = document.getElementById("createResult");
+
+        createUserForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(createUserForm);
+
+            const username = formData.get('username');
+            const password = formData.get('password');
+            const firstName = formData.get('firstName');
+            const lastName = formData.get('lastName');
+            const birthday = formData.get('birthday');
+
+            try {
+                const res = await fetch('/create-user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body:
+                        `username=${encodeURIComponent(username)}` +
+                        `&password=${encodeURIComponent(password)}` +
+                        `&firstName=${encodeURIComponent(firstName)}` +
+                        `&lastName=${encodeURIComponent(lastName)}` +
+                        `&birthday=${encodeURIComponent(birthday)}`
+                });
+
+                const text = await res.text();
+                createResult.textContent = text;
+            } catch (err) {
+                createResult.textContent = 'Error creating user';
+            }
+        });
+    </script>
+
+</body>
+
+</html>
