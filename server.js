@@ -52,7 +52,7 @@ app.post('/login', (req, res) => {
         WHERE username = ? AND password = ?
     `;
 
-    db.query(sql, [username, hashedPassword], (err, results) => {
+    db.query(sql, [username, req.body.password], (err, results) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Server error');
